@@ -1,0 +1,28 @@
+{
+  "name": "dietatcc",
+  "version": "1.0.0",
+  "description": "Dependencias do projeto de site para o TCC da Etec de Itaquaquecetuba com o tema Gerenciador de Dietas.",
+  "main": "index.js",
+  "dependencies": {
+    "bootstrap": "^4.1.2",
+    "gulp": "^3.9.1",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.14.3"
+  },
+  "devDependencies": {
+    "sass": "^1.10.0"
+  },
+  "scripts": {
+    "test": "start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mark57449/DietaTCC.git"
+  },
+  "author": "Wendel Henrique",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mark57449/DietaTCC/issues"
+  },
+  "homepage": "https://github.com/Mark57449/DietaTCC#readme"
+}
