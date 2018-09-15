@@ -1,77 +1,139 @@
 import React from 'react';
-import { AppRegistry, Image, ScrollView, StyleSheet, Text, View , TextInput, Button, Alert } from 'react-native';
+import { AppRegistry, Image, ScrollView, StyleSheet, Text, TextInput, Button, Alert, TouchableOpacity, Dimensions, View} from 'react-native';
+import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
+/*
+var React = require('react');
+var Text = require('react-native').Text;
+var View = require('react-native').View;
+var Button = require('react-native').Button;
+var AppRegistry = require('react-native').AppRegistry;
+var StyleSheet = require('react-native').StyleSheet;
+var ScrollView = require('react-native').ScrollView;
+var TextInput = require('react-native').TextInput;
+var Alert = require('react-native').Alert;
+
+var
+*/
+
+const Inicio = () => (
+  
+      <ScrollView style={MainStyle.conteudo} showsVerticalScrollIndicator={false}>
+        <Image source={require('./src/img/Geeko!!.png')} style={{width: 320, height: 100, marginVertical: 13, resizeMode: 'contain'}} />
+        <Text style={MainStyle.InfoText}>Seja bem-vindo, o nosso aplicativo tem a proposta de sugerir um meio de tornar a sua dieta mais fácil com a simples ideia de um diário alimentar, e um filtro de alimentos.</Text>
+
+        <TouchableOpacity style={[MainStyle.buttonMain, MainStyle.BtnRoxo]} accessibilityLabel="Learn more about this purple button">
+          <Text style={MainStyle.buttonText}>FAÇA O CADASTRO DO SEU PERFIL</Text>
+        </TouchableOpacity>  
+        <TouchableOpacity style={[MainStyle.buttonMain, MainStyle.BtnLaranja]} accessibilityLabel="Learn more about this purple button">
+          <Text style={MainStyle.buttonText}>CRIE A SUA PRIMEIRA ROTINA</Text>
+        </TouchableOpacity>  
+        <TouchableOpacity style={[MainStyle.buttonMain, MainStyle.BtnAzul]} accessibilityLabel="Learn more about this purple button">
+          <Text style={MainStyle.buttonText}>ENCONTRE SOBRE OS ALIMENTOS</Text>
+        </TouchableOpacity>  
+        <TouchableOpacity style={[MainStyle.buttonMain, MainStyle.BtnVerde]} accessibilityLabel="Learn more about this purple button">
+          <Text style={MainStyle.buttonText}>NOS DE O SEU FEEDBACK :)</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={MainStyle.center} accessibilityLabel="Learn more about this purple button">
+          <Image source={require('./src/img/arrow-down.png')} style={{width: 40, height: 40, resizeMode: 'contain'}}/>
+        </TouchableOpacity>
+
+        <View style={{ backgroundColor: '#00F'}}>
+          <Text style={MainStyle.InfoText}>Seja bem-vindo, o nosso aplicativo tem a proposta de sugerir um meio de tornar a sua dieta mais fácil com a simples ideia de um diário alimentar, e um filtro de alimentos.</Text>
+          <Text style={MainStyle.InfoText}>Seja bem-vindo, o nosso aplicativo tem a proposta de sugerir um meio de tornar a sua dieta mais fácil com a simples ideia de um diário alimentar, e um filtro de alimentos.</Text>
+          <Text style={MainStyle.InfoText}>Seja bem-vindo, o nosso aplicativo tem a proposta de sugerir um meio de tornar a sua dieta mais fácil com a simples ideia de um diário alimentar, e um filtro de alimentos.</Text>
+          <Text style={MainStyle.InfoText}>Seja bem-vindo, o nosso aplicativo tem a proposta de sugerir um meio de tornar a sua dieta mais fácil com a simples ideia de um diário alimentar, e um filtro de alimentos.</Text>
+        </View>
+      </ScrollView> 
+);
+const Rotinas = () => (
+  <ScrollView style={{ backgroundColor: '#673ab7' }} />
+);
+
+const Alimentos = () => (
+  <ScrollView style={{ backgroundColor: '#673ab7' }} />
+);
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {text: ''};
+    this.state = {
+      screenHeight: Dimensions.get('window').height,      
+      screenWidth: Dimensions.get('window').width,
+      index: 0,
+    routes: [
+      { key: '0', title: 'Inicio' },
+      { key: '1', title: 'Rotinas' },
+      { key: '2', title: 'Alimentos' },
+    ],
+    };
   }
 
-  _onPressButton() {
-    Alert.alert('You tapped the button!')
-  }
+
+  
 
   render() {
+
+  //const App = () => {
     return (
-      <ScrollView>
-        <Image
-          source={{uri: 'https://i.chzbgr.com/full/7345954048/h7E2C65F9/'}}
-          style={{width: 370, height:180}}
-        />
-        <Text style={{
-            flex: 1
-          }}>
-          On iOS, a React Native ScrollView uses a native UIScrollView.
-          On Android, it uses a native ScrollView.
-
-          On iOS, a React Native Image uses a native UIImageView.
-          On Android, it uses a native ImageView.
-
-          React Native wraps the fundamental native components, giving you
-          the performance of a native app, plus the clean design of React.
-        </Text>
-        <View style={{backgroundColor: 'powderblue',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center'}}>
-          <View style={{width: 50, height: 50, backgroundColor: 'powderblue'}} />
-          <View style={{width: 50, height: 50, backgroundColor: 'skyblue'}} />
-          <View style={{width: 50, height: 50, backgroundColor: 'steelblue'}} />
-        </View>
-        <View style={{padding: 10}}>
-          <TextInput
-            style={{height: 40}}
-            placeholder="Type here to translate!"
-            onChangeText={(text) => this.setState({text})}
-          />
-          <Text style={{padding: 10, fontSize: 42}}>
-            {this.state.text.split(' ').map((word) => word && '🍕').join(' ')}
-          </Text>
-        </View>
-        <View style={styles.buttonContainer}>
-          <Button
-            onPress={this._onPressButton}
-            title="Press Me"
-          />
-        </View>
-      </ScrollView>
+      
+        <TabView
+        navigationState={this.state}
+        renderScene={SceneMap({
+          '0': Inicio,
+          '1': Rotinas,
+          '2': Alimentos,
+        })}
+        onIndexChange={index => this.setState({ index })}
+        initialLayout={{ height: 0, width: Dimensions.get('window').width, marginTop: 20 }}
+      />
 
     );
-  }
-}
+ }
+};
 
-const styles = StyleSheet.create({
-  container: {
-   flex: 1,
-   justifyContent: 'center',
+const MainStyle = StyleSheet.create({
+  conteudo: {
+    paddingTop: 5,
+    marginHorizontal: 30,
   },
-  buttonContainer: {
-    margin: 20
+  buttonMain: {
+    padding: 12,
+    borderWidth: 0,
+    borderRadius: 3,
+    marginTop: 10,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.2,
   },
-  alternativeLayoutButtonContainer: {
-    margin: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between'
+  buttonText: {
+    color: '#FFF',
+    fontWeight: 'bold',
+    fontSize: 15,
+    alignSelf: 'center',
   },
+  BtnRoxo: {
+    backgroundColor: '#976dd0',
+  },
+  BtnLaranja: {
+    backgroundColor: '#ff8039',
+  },
+  BtnAzul: {
+    backgroundColor: '#00a6ff',
+  },
+  BtnVerde: {
+    backgroundColor: '#69bc49',
+  },
+  InfoText: {
+    color: '#777',
+    fontWeight: 'normal',
+    fontSize: 16,
+  },
+  center: {
+    marginVertical: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 });
-AppRegistry.registerComponent('React-Native', () => App);
+
+AppRegistry.registerComponent('JustDietNative', () => App);
