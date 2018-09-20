@@ -1,8 +1,14 @@
 {
   "expo": {
-    "name": "APP JustDiet (TCC)",
+    "name": "Just Diet!",
     "sdkVersion": "27.0.0",
-    "slug": "JustDiet",
-    "privacy": "public"
+    "slug": "JustDietTCC",
+    "privacy": "public",
+    "ios": {
+      "bundleIdentifier": "com.apptccIOS.justdiet"
+    },
+    "android": {
+        "package": "com.apptccAndroid.justdiet"
+    }
   }
 }
