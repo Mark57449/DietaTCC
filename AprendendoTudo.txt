@@ -1,0 +1,21 @@
+Mudança dos botões
+
+Adição de Texto
+
+Adição de Logo
+
+Adição de Estilo
+
+Pasta src adicionada
+
+Pasta src/img adicionada
+
+Imagens de exemplo adicionadas
+
+Mudança de Variaveis
+
+Adicionado o TabView
+
+TabView configurado (Nova aba)
+
+Icone de seta pra baixo adicionado no aplicativo e em SRC/IMG
