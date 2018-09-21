@@ -4,6 +4,9 @@
     "sdkVersion": "27.0.0",
     "slug": "JustDietTCC",
     "privacy": "public",
+    "androidStatusBar": {
+      "backgroundColor": "#C2185B"
+    },
     "ios": {
       "bundleIdentifier": "com.apptccIOS.justdiet"
     },
