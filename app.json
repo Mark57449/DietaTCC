@@ -1,0 +1,17 @@
+{
+  "expo": {
+    "name": "Just Diet!",
+    "sdkVersion": "27.0.0",
+    "slug": "JustDietTCC",
+    "privacy": "public",
+    "androidStatusBar": {
+      "backgroundColor": "#ff5722"
+    },
+    "ios": {
+      "bundleIdentifier": "com.apptccIOS.justdiet"
+    },
+    "android": {
+        "package": "com.apptccAndroid.justdiet"
+    }
+  }
+}
