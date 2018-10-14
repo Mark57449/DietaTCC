@@ -124,7 +124,7 @@ salvarDados(){
             scrollYPos = Dimensions.get('window').height * 1;
             this.scroller.scrollTo({x: 0, y: scrollYPos});}} accessibilityLabel="Learn more about this purple button">
 
-            <Image source={require('../img/arrow-down.png')} style={{width: 40, height: 40, resizeMode: 'contain'}}/>
+            <Image source={require('../../img/squareOk.png')} style={{width: 40, height: 40, resizeMode: 'contain'}}/>
           </TouchableOpacity>
         </View>
 
@@ -134,7 +134,7 @@ salvarDados(){
             scrollYPos = Dimensions.get('window').height * 1;
             this.scroller.scrollTo({x: 0, y: 0});}} accessibilityLabel="Learn more about this purple button">
 
-            <Image source={require('../img/caret-arrow-up.png')} style={{width: 40, height: 40, }}/>
+            <Image source={require('../../img/squareOk.png')} style={{width: 40, height: 40, }}/>
           </TouchableOpacity>
 
           <InformationComponent titulo='Beneficios de uma boa alimentação!' data='20/09/2018'
