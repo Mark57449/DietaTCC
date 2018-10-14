@@ -5,7 +5,7 @@
     "slug": "JustDietTCC",
     "privacy": "public",
     "androidStatusBar": {
-      "backgroundColor": "#C2185B"
+      "backgroundColor": "#ff5722"
     },
     "ios": {
       "bundleIdentifier": "com.apptccIOS.justdiet"
