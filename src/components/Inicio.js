@@ -1,6 +1,8 @@
 import React from 'react';
-import { AppRegistry, Image, ScrollView, StyleSheet, Text, TextInput, Button, Alert, TouchableOpacity, Dimensions, View, Platform} from 'react-native';
+import { AppRegistry, Image, ScrollView, Animated, StyleSheet, Text, TextInput, Button, Alert, TouchableOpacity, Dimensions, View, Platform} from 'react-native';
 import firebase from 'firebase';
+import { TabView, TabBar, SceneMap, type Route,
+  type NavigationState } from 'react-native-tab-view';
 
 let scrollYPos = 0;
 
@@ -44,10 +46,18 @@ async function signInWithGoogleAsync() {
     }
 
 class Inicio extends React.Component {
-    
+    state = {
+    index: 0,
+    routes: [
+      { key: '1', title: 'Seu Perfil', flequix: 4 },
+      { key: '2', title: 'Dicas e Informações', flequix: 6 },
+    ],
+  };
+
+
     LoginListener(){
       var user = firebase.auth().currentUser;
-      
+
         if (user) {
           alert("Você está logado!");
           user.providerData.forEach(function (profile) {
@@ -92,96 +102,126 @@ salvarDados(){
           }
         }
       );
-      
+
     }
 
 
-  render(){
-    return(
-      <ScrollView scrollEnabled={false} showsVerticalScrollIndicator={false} style={MainStyle.conteudo} ref={(scroller) => {this.scroller = scroller}}>
-        <View>
-          <View style={{ width: 320, height: 100, backgroundColor: '#976dd0' }}>
-            <Text style={{ fontWeight: 'bold', fontSize: 30, color: '#FFF', padding: 30, paddingLeft: 90 }}>Logotipo</Text>
-          </View>
+_renderTabBar = props => {
+    const inputRange = props.navigationState.routes.map((x, i) => i);
 
-          
-          <Text style={MainStyle.InfoText}>Seja bem-vindo, o nosso aplicativo tem a proposta de sugerir um meio de tornar a sua dieta mais fácil com a simples ideia de um diário alimentar, e um filtro de alimentos.</Text>
 
-          <TouchableOpacity onPress={() => { this.salvarDados(); }} style={[MainStyle.buttonMain, MainStyle.BtnRoxo]} accessibilityLabel="Learn more about this purple button">
-            <Text style={MainStyle.buttonText}>FAÇA O CADASTRO DO SEU PERFIL</Text>
-          </TouchableOpacity>  
-          <TouchableOpacity onPress={() => { signInWithGoogleAsync(); }} style={[MainStyle.buttonMain, MainStyle.BtnLaranja]} accessibilityLabel="Learn more about this purple button">
-            <Text style={MainStyle.buttonText}>CRIE A SUA PRIMEIRA ROTINA</Text>
-          </TouchableOpacity>  
-          <TouchableOpacity onPress={() => { this.LoginListener(); }} style={[MainStyle.buttonMain, MainStyle.BtnAzul]} accessibilityLabel="Learn more about this purple button">
-            <Text style={MainStyle.buttonText}>ENCONTRE SOBRE OS ALIMENTOS</Text>
-          </TouchableOpacity>  
-          <TouchableOpacity onPress={() => { this.Deslogar(); }} style={[MainStyle.buttonMain, MainStyle.BtnVerde]} accessibilityLabel="Learn more about this purple button">
-            <Text style={MainStyle.buttonText}>NOS DE O SEU FEEDBACK :)</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={MainStyle.center} onPress={() => {
-            scrollYPos = Dimensions.get('window').height * 1;
-            this.scroller.scrollTo({x: 0, y: scrollYPos});}} accessibilityLabel="Learn more about this purple button">
-
-            <Image source={require('../img/squareOk.png')} style={{width: 40, height: 40, resizeMode: 'contain'}}/>
-          </TouchableOpacity>
-        </View>
-
-        <ScrollView style={MainStyle.screen}>
-
-          <TouchableOpacity style={MainStyle.center} onPress={() => {
-            scrollYPos = Dimensions.get('window').height * 1;
-            this.scroller.scrollTo({x: 0, y: 0});}} accessibilityLabel="Learn more about this purple button">
-
-            <Image source={require('../img/squareOk.png')} style={{width: 40, height: 40, }}/>
-          </TouchableOpacity>
-
-          <InformationComponent titulo='Beneficios de uma boa alimentação!' data='20/09/2018'
-           autor='Fulano' imagem="../img/Geeko!!.png" />
-          <InformationComponent titulo='Beneficios de uma boa alimentação!' data='20/09/2018'
-           autor='Fulano' imagem="../img/uvas.png" />
-          <InformationComponent titulo='Beneficios de uma boa alimentação!' data='20/09/2018'
-           autor='Fulano' imagem="../img/uvas.png" />
-          <InformationComponent titulo='Beneficios de uma boa alimentação!' data='20/09/2018'
-           autor='Fulano' imagem="../img/uvas.png" />
-          <InformationComponent titulo='Beneficios de uma boa alimentação!' data='20/09/2018'
-           autor='Fulano' imagem="../img/uvas.png" />
-          <InformationComponent titulo='Beneficios de uma boa alimentação!' data='20/09/2018'
-           autor='Fulano' imagem="../img/uvas.png" />
-          <InformationComponent titulo='Beneficios de uma boa alimentação!' data='20/09/2018'
-           autor='Fulano' imagem="../img/uvas.png" />
-          <InformationComponent titulo='Beneficios de uma boa alimentação!' data='20/09/2018'
-           autor='Fulano' imagem="../img/uvas.png" />
-          <InformationComponent titulo='Beneficios de uma boa alimentação!' data='20/09/2018'
-           autor='Fulano' imagem="../img/uvas.png" />
-
-          
-        </ScrollView>
-        
-
-      </ScrollView>
+    return (
+      <View style={styles.tabBar}>
+        {props.navigationState.routes.map((route, i) => {
+          const color = props.position.interpolate({
+            inputRange,
+            outputRange: inputRange.map(
+              inputIndex => (inputIndex === i ? '#FFF' : '#DDD')
+            ),
+          });
+          return (
+            <TouchableOpacity style={[{ flex: route.flequix }, styles.tabItem]} key={route.key} onPress={() => props.jumpTo(route.key)}>
+              <Animated.Text textTransform="uppercase" style={[{ color }, styles.tabText ]}>{route.title.toUpperCase()}</Animated.Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
     );
-  } 
-};
+  };
 
-class InformationComponent extends React.Component {
   render(){
-
-    var Teste = { uri: this.props.imagem};
-    var aa = '../img/uvas.png';
+      if(firebase.auth().currentUser) {
     return(
-      <View style={InfoStyle.container}>
-        <Image source={{ uri: aa }} style={{width: 320, height: 100, marginVertical: 8}} />
-        <Text style={InfoStyle.titulo}>{this.props.titulo}</Text>
-        <View style={InfoStyle.ladoALado}>
-          <Text>{this.props.data}</Text>
-          <Text>Autor: {this.props.autor}</Text>
+      <TabView
+        navigationState={this.state}
+        renderScene={SceneMap({
+          '1': Perfil,
+          '2': DicasEInformacoes,
+        })}
+        renderTabBar={this._renderTabBar}
+        onIndexChange={index => this.setState({ index })}
+        initialLayout={{ height: 0, width: Dimensions.get('window').width }}
+      />
+    );
+  } else {
+    return(
+      <View style={NaoLogado.viewMain}>
+        <View>
+          <Text>As funções estaram bloqueadas até você entrar com uma conta!</Text>
         </View>
+        <TouchableOpacity style={NaoLogado.btnLoginEmail}>
+          <Text style={NaoLogado.txtBtnLogin}>Entra com Conta Pessoal</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={NaoLogado.btnLoginGoogle} onPress={() => signInWithGoogleAsync()}>
+          <Text style={NaoLogado.txtBtnLogin}>Entrar com o Google</Text>
+        </TouchableOpacity>
       </View>
     );
   }
+
+  }
 };
+
+import Perfil from './Perfil.js';
+
+import DicasEInformacoes from './DicasEInformacoes.js';
+
+const NaoLogado = StyleSheet.create({
+  viewMain: {
+    padding: 30,
+  },
+  btnLoginEmail: {
+    padding: 10,
+    backgroundColor: '#976dd0',
+    borderRadius: 5,
+    marginVertical: 5,
+  },
+  btnLoginGoogle: {
+    padding: 10,
+    backgroundColor: '#DB4437',
+    borderRadius: 5,
+    marginVertical: 5,
+  },
+  txtBtnLogin: {
+    color: '#FFF',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 19
+  }
+});
+
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+    },
+    tabText: {
+      fontWeight: 'bold',
+      fontSize: 16,
+    },
+    tabBar: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    tabItem: {
+      backgroundColor: '#976dd0',
+      alignItems: 'center',
+      paddingHorizontal: 16,
+      paddingVertical: 11,
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+    },
+    tab: {
+      flex: 1,
+      alignItems: 'center',
+      borderTopWidth: StyleSheet.hairlineWidth,
+      borderTopColor: 'rgba(0, 0, 0, .2)',
+      paddingTop: 4.5,
+  },
+    iconContainer: {
+    height: 26,
+    width: 26,
+  },
+  });
 
 const InfoStyle = StyleSheet.create({
   container: {
