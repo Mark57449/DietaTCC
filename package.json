@@ -1,6 +1,6 @@
 {
   "name": "React-Native",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "devDependencies": {
     "eslint-config-rallycoding": "^3.2.0",
@@ -24,6 +24,8 @@
     "firebase": "^5.5.3",
     "react": "16.3.1",
     "react-native": "~0.55.2",
-    "react-native-tab-view": "^1.0.2"
+    "react-native-popup-dialog": "^0.15.1",
+    "react-native-tab-view": "^1.0.2",
+    "react-navigation": "^2.18.0"
   }
 }
