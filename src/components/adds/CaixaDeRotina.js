@@ -10,13 +10,13 @@ class CaixaDeRotina extends React.Component {
 	render(){
 		return(
 			<View>
-				<TouchableOpacity activeOpacity={1} onPress={() => {Alert.alert("Tá funfando.", "Texto")}} style={[StyleRotina.container, {backgroundColor: this.props.cor}]}>
+				<TouchableOpacity activeOpacity={1} onPress={this.props.acao} style={[StyleRotina.container, {backgroundColor: this.props.cor}]}>
 					<Text style={StyleRotina.titulo}>Titulo da Rotina</Text>
 					<Text style={{ color: '#DDD' }}>Pequena descrição sobre a sua rotina.</Text>
 					<Text style={{ color: '#EEE', fontWeight: 'bold', paddingTop: 5 }}> > {this.props.tipo}</Text>
 				</TouchableOpacity>
 			</View>
-		)
+		);
 	}
 
 };
