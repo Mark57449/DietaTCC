@@ -31,12 +31,16 @@ class Alimentos extends React.Component {
 
 	render(){
 		return (
-			<View style={{ paddingVertical: 20, paddingHorizontal: 15}}>
+			<View style={{ paddingVertical: 20, paddingHorizontal: 15, marginBottom: 90}}>
 				<View style={EstilosRotinas.ladoALado}>
-					<Image source={require('../img/squareOk.png')} style={{ width: 24, height: 24, paddingTop: 2 }} /> 
-					<Text style={[EstilosRotinas.legenda, { color: '#65B545' }]}> Sem problemas! </Text>
-					<Image source={require('../img/squareNo.png')} style={{ width: 24, height: 24, paddingTop: 2 }} />
-					<Text style={[EstilosRotinas.legenda, { color: '#F95F62'}]}> Não recomendado! </Text>
+					<View style={{ flexDirection: 'row', paddingHorizontal: 20 }}>
+						<Image source={require('../img/squareOk.png')} style={{ width: 24, height: 24, paddingTop: 2 }} /> 
+						<Text style={[EstilosRotinas.legenda, { color: '#65B545', marginLeft: 10 }]}>Sem problemas! </Text>
+					</View>
+					<View style={{ flexDirection: 'row', paddingHorizontal: 20 }}>
+						<Image source={require('../img/squareNo.png')} style={{ width: 24, height: 24, paddingTop: 2 }} />
+						<Text style={[EstilosRotinas.legenda, { color: '#F95F62', marginLeft: 10 }]}> Não recomendado! </Text>
+					</View>
 				</View>
 				<View>
 					<TextInput
