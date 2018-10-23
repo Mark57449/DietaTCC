@@ -5,40 +5,64 @@ import { TabView, TabBar, SceneMap, type Route,
 import { Constants } from 'expo';
 import firebase from 'firebase';
 
+var loginBoolean = null;
+var n = 1;
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      screenHeight: Dimensions.get('window').height,      
+      screenHeight: Dimensions.get('window').height,
       screenWidth: Dimensions.get('window').width,
       index: 0,
       routes: [
-        { key: '0', title: 'Inicio', icon: '#976dd0' },
-        { key: '1', title: 'Alimentos', icon: '#00a6ff' },
-        { key: '2', title: 'Rotinas', icon: '#ff8039' },
+        { key: '0', title: 'Inicio', icon: '#976dd0'},
+        { key: '1', title: 'Alimentos', icon: '#00a6ff'},
+        { key: '2', title: 'Rotinas', icon: '#ff8039'},
       ],
     };
   }
 
-  componentWillMount(){
 
-        let config = {
-          apiKey: "AIzaSyDXD-picai3jwrFuBhVNewtMk0HDjcek0A",
-          authDomain: "justdiet-exc.firebaseapp.com",
-          databaseURL: "https://justdiet-exc.firebaseio.com",
-          projectId: "justdiet-exc",
-          storageBucket: "justdiet-exc.appspot.com",
-          messagingSenderId: "508483125958"
-        };
-        firebase.initializeApp(config);
+  componentWillMount(){
+      var config = {
+        apiKey: "AIzaSyDXD-picai3jwrFuBhVNewtMk0HDjcek0A",
+        authDomain: "justdiet-exc.firebaseapp.com",
+        databaseURL: "https://justdiet-exc.firebaseio.com",
+        projectId: "justdiet-exc",
+        storageBucket: "justdiet-exc.appspot.com",
+        messagingSenderId: "508483125958"
+      };
+      firebase.initializeApp(config);
     }
 
-    
-
+    LoginListener(routeKey){
+        var user = firebase.auth().currentUser;
+        if (user) {
+          alert("Você está logado!");
+          user.providerData.forEach(function (profile) {
+            console.log("Sign-in provider: " + profile.providerId);
+            console.log("  Provider-specific UID: " + profile.uid);
+            console.log("  Name: " + profile.displayName);
+            console.log("  Email: " + profile.email);
+            console.log("  Photo URL: " + profile.photoURL);
+            n++;
+            return false;
+          });
+        } else {
+          console.log("Não está logado!");
+          n++;
+          return true;
+        }
+        n++;
+        return true;
+    };
 
   _renderIcon = ({ route }) => {
      return <Image source={{ uri: this.props.route }} style={{ width: 32, height: 32 }} />;
    }
+
+
 
   _renderTabBar = props => {
     const inputRange = props.navigationState.routes.map((x, i) => i);
@@ -54,10 +78,11 @@ export default class App extends React.Component {
           });
           return (
             <TouchableOpacity
+              disabled={this.LoginListener(route.key)}
               style={styles.tabItem} key={route.key}
               onPress={() => props.jumpTo(route.key)}>
               <View style={{ width: 24, height: 24, backgroundColor: route.icon, borderRadius: 4, borderWidth: 1, borderColor: '#FFF'}}></View>
-              <Animated.Text style={{ color, marginTop: 3 }}>{route.title}</Animated.Text>
+              <Animated.Text style={{ color, marginTop: 3, fontSize: 16 }}>{route.title}</Animated.Text>
             </TouchableOpacity>
           );
         })}
@@ -89,7 +114,7 @@ export default class App extends React.Component {
  }
 };
 
-  import Inicio from './src/components/Inicio.js';  
+  import Inicio from './src/components/Inicio.js';
 
   import Rotinas from './src/components/Rotinas.js';
 
