@@ -18,7 +18,6 @@ class CaixaDeRotina extends React.Component {
 			</View>
 		);
 	}
-
 };
 
 const StyleRotina = StyleSheet.create({
