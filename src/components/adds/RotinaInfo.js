@@ -48,7 +48,7 @@ class RotinaInfo extends React.Component {
       	<View>
 	      	<View style={Styles.viewHeader}>
 	      		<Text style={Styles.viewHeaderTexto}>
-	      			Prosposta que o projeto oferece, omnis iste natus error sit voluptatem
+	      			Lorem ipsum dolor sit asd wer, omnis iste natus error sit voluptatem
 	      	 		accusant doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo
 	      	  		inventore veritatis.
 	      	  	</Text>
