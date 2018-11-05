@@ -1,0 +1,16 @@
+{
+  "name": "Site_Backend_JustDiet",
+  "version": "1.0.0",
+  "description": "Site para gerenciamento das postagens do aplicativo Just Diet!",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^4.22.0",
+    "webpack-cli": "^3.1.2"
+  }
+}
