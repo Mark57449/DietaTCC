@@ -5,7 +5,10 @@
     "slug": "JustDietTCC",
     "privacy": "public",
     "androidStatusBar": {
-      "backgroundColor": "#ff5722"
+      "backgroundColor": "#976dd0"
+    },
+    "splash": {
+      "image": "./src/img/LogotipoJustDietDefinitivo.png"
     },
     "ios": {
       "bundleIdentifier": "com.apptccIOS.justdiet"
