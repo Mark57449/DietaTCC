@@ -1,12 +1,55 @@
 import React from 'react';
-import { AppRegistry, Animated, Image, ScrollView, StyleSheet, Text, TextInput, Button, Alert, Icon, StatusBar, TouchableOpacity, Dimensions, View, Platform} from 'react-native';
+import { AppRegistry, AsyncStorage, Animated, Image, ScrollView, StyleSheet, Text, TextInput, Button, Alert, Icon, Keyboard, StatusBar, TouchableOpacity, Dimensions, View, Platform, UIManager} from 'react-native';
 import { TabView, TabBar, SceneMap, type Route,
   type NavigationState } from 'react-native-tab-view';
+import { createStackNavigator } from 'react-navigation';
 import { Constants } from 'expo';
 import firebase from 'firebase';
+import PopupDialog, { DialogTitle, FadeAnimation, DialogButton } from 'react-native-popup-dialog';
 
-var loginBoolean = null;
-var n = 1;
+import { isSignedIn } from "./src/components/adds/Auth.js";
+
+import { createRootNavigator, SignedOutRoutes, SignedInRoutes } from './src/components/Routes.js';
+
+// var loginBoolean = null;
+// var n = 1;
+const { State: TextInputState } = TextInput;
+// var logado = null;
+
+async function signInWithGoogleAsync() {
+      try {
+        const result = await Expo.Google.logInAsync({
+          androidClientId: '733208892568-mgisq0la41r30ig47gutmm8vhv9hhmtv.apps.googleusercontent.com',
+          iosClientId: '733208892568-6eloato5hjamiab0ktb56pcemb26u81v.apps.googleusercontent.com',
+          scopes: ['profile', 'email'],
+        });
+
+        if (result.type === 'success') {
+
+          firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE)
+          .then(function() {
+            var credential = firebase.auth.GoogleAuthProvider.credential(result.idToken);
+
+            // Sign in with credential from the Google user.
+             return firebase.auth().signInAndRetrieveDataWithCredential(credential);
+           }).catch(function(error) {
+              // Handle Errors here.
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              alert(error);
+            });
+
+          return result;
+        } else {
+          return {cancelled: true};
+        }
+      } catch(e) {
+        return {error: true};
+      }
+
+
+
+    }
 
 export default class App extends React.Component {
   constructor(props) {
@@ -20,9 +63,14 @@ export default class App extends React.Component {
         { key: '1', title: 'Alimentos', icon: '#00a6ff'},
         { key: '2', title: 'Rotinas', icon: '#ff8039'},
       ],
+      email: '',
+      senha: '',
+      text: '',
+      shift: new Animated.Value(0),
+      signed: false,
+      signLoaded: false,
     };
   }
-
 
   componentWillMount(){
       var config = {
@@ -34,12 +82,30 @@ export default class App extends React.Component {
         messagingSenderId: "508483125958"
       };
       firebase.initializeApp(config);
+
+      this.LoginListener();
+      alert(this.logado);
+
+      isSignedIn()
+      .then(res => this.setState({ signed: res, signLoaded: true }))
+      .catch(err => alert("Erro"));
+
     }
 
-    LoginListener(routeKey){
+    componentWillUnmount() {
+    this.keyboardDidShowSub.remove();
+    this.keyboardDidHideSub.remove();
+  }
+
+  showFadeAnimationDialog = () => {
+      this.fadeAnimationDialog.show();
+  }
+
+
+    LoginListener(){
         var user = firebase.auth().currentUser;
         if (user) {
-          alert("Você está logado!");
+          console.log("Você está logado!");
           user.providerData.forEach(function (profile) {
             console.log("Sign-in provider: " + profile.providerId);
             console.log("  Provider-specific UID: " + profile.uid);
@@ -47,78 +113,79 @@ export default class App extends React.Component {
             console.log("  Email: " + profile.email);
             console.log("  Photo URL: " + profile.photoURL);
             n++;
-            return false;
+            return this.logado = true;
           });
         } else {
           console.log("Não está logado!");
           n++;
-          return true;
+          return this.logado = false;
         }
         n++;
-        return true;
+        return this.logado = false;
     };
 
-  _renderIcon = ({ route }) => {
-     return <Image source={{ uri: this.props.route }} style={{ width: 32, height: 32 }} />;
-   }
 
 
-
-  _renderTabBar = props => {
-    const inputRange = props.navigationState.routes.map((x, i) => i);
-
-    return (
-      <View style={styles.tabBar}>
-        {props.navigationState.routes.map((route, i) => {
-          const color = props.position.interpolate({
-            inputRange,
-            outputRange: inputRange.map(
-              inputIndex => (inputIndex === i ? '#333' : '#BBB')
-            ),
-          });
-          return (
-            <TouchableOpacity
-              disabled={this.LoginListener(route.key)}
-              style={styles.tabItem} key={route.key}
-              onPress={() => props.jumpTo(route.key)}>
-              <View style={{ width: 24, height: 24, backgroundColor: route.icon, borderRadius: 4, borderWidth: 1, borderColor: '#FFF'}}></View>
-              <Animated.Text style={{ color, marginTop: 3, fontSize: 16 }}>{route.title}</Animated.Text>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-    );
-  };
-
-  _handleChangeTab = index => this.setState({ index });
-
-  _renderHeader = props => <TabBarMenu {...props} />;
-
-  _renderScene = SceneMap({
-    '0': Inicio,
-    '1': Alimentos,
-    '2': Rotinas,
-  });
 
   render() {
-    return (
-        <TabView
-        navigationState={this.state}
-        renderScene={this._renderScene}
-        renderHeader={this._renderHeader}
-        renderTabBar={this._renderTabBar}
-        onIndexChange={this._handleChangeTab}
-        initialLayout={{ height: 0, width: Dimensions.get('window').width }}
-      />
-    );
+    const { signLoaded, signed } = this.state;
+
+    if (!signLoaded) {
+      return null;
+    }
+
+    const Layout = createRootNavigator(signed);
+    return <Layout />;
  }
+
 };
 
-  import Inicio from './src/components/Inicio.js';
+  const NaoLogado = StyleSheet.create({
+  viewMain: {
+    padding: 15,
+    height: Dimensions.get('window').height,
+    zIndex: 5,
+  },
+  btnLoginEmail: {
+    paddingHorizontal: 10,
+    paddingVertical: 15,
+    backgroundColor: '#976dd0',
+    borderRadius: 5,
+    marginVertical: 8,
+  },
+  btnLoginGoogle: {
+    padding: 10,
+    backgroundColor: '#DB4437',
+    borderWidth: 0,
+    borderRadius: 5,
+    marginVertical: 5
+  },
+  txtBtnLogin: {
+    color: '#FFF',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 19
+  }
+});
 
-  import Rotinas from './src/components/Rotinas.js';
-
-  import Alimentos from './src/components/Alimentos.js';
+  const InfoStyle = StyleSheet.create({
+  container: {
+    paddingHorizontal: 5,
+    paddingVertical: 3,
+    marginVertical: 5,
+    borderWidth: 1,
+    borderColor: '#d6d7da',
+    borderRadius: 6,
+  },
+  titulo: {
+    color: '#555',
+    fontSize: 18,
+  },
+  ladoALado: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+});
 
   const styles = StyleSheet.create({
     container: {
